@@ -176,9 +176,6 @@ public class Main extends Application
 			    		iv = new ImageView(img);
 			    		iv.setFitHeight((sceneHeight/rowNumber)*imageHeightPercentage);
 			    		iv.setFitWidth((sceneWidth*rightPartWidthPercentage)/rightSideCardNumberForARow);
-			    		iv.fitWidthProperty().bind(imf.widthProperty());
-			    		iv.setPreserveRatio(true);
-			    		iv.setPreserveRatio(true);
 			    		imf.getChildren().addAll(closeBtn,iv);
 			    		imf.setPadding(Insets.EMPTY);
 			    		StackPane.setAlignment(closeBtn, Pos.TOP_RIGHT);
