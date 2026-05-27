@@ -42,7 +42,7 @@ public class Main extends Application
 	static int sceneWidth=1800;
 	static int sceneHeight=1000;
 	static int rowNumber=7;
-	static double leftPartWidthPercentage=0.7;
+	static double leftPartWidthPercentage=0.75;
 	static double rightPartWidthPercentage=1-leftPartWidthPercentage;
 	static double imageHeightPercentage=0.65;
 	static double textFieldHeightPercentage=1-imageHeightPercentage;
@@ -112,7 +112,7 @@ public class Main extends Application
 			{
 			    Label label = new Label(ranks[k]);
 			    labels.add(label);
-			    labels.get(k).setPrefWidth((sceneWidth*leftPartWidthPercentage)/10);
+			    labels.get(k).setPrefWidth((sceneWidth*leftPartWidthPercentage)/7);
 			    labels.get(k).setPrefHeight(sceneHeight/7);
 			    labels.get(k).setAlignment(Pos.CENTER);
 			    if(k==0) labels.get(k).setStyle("-fx-background-color: yellow;-fx-font-size: 5em; -fx-font-weight: bold; -fx-text-align:right;");
@@ -224,6 +224,32 @@ public class Main extends Application
 			    		    {
 
 			    		        ((Pane) lastParent).getChildren().remove(card);
+			    		        
+			    		        int[] areAllRowsNotFull=new int[rows.size()];
+			    		        
+			    		        for (int t=rows.size()-1;t>=0;t-=1) 
+			    			    {
+			    			        if (rows.get(t).getChildren().size() < rightSideCardNumberForARow) 
+			    			        {
+			    			            areAllRowsNotFull[t]=1;
+			    			        }
+			    			        else
+			    			        {
+			    			        	continue;
+			    			        }
+			    			    
+				    		        int total=0;
+				    		        for(int d=areAllRowsNotFull.length-1;d>=0;d-=1)
+				    		        {
+				    		        	total+=areAllRowsNotFull[d];
+				    		        }
+				    		        if(total>=rows.size())
+				    		        {
+				    		        	root.setDividerPositions(leftPartWidthPercentage);
+				    		        	total=0;
+				    		        	
+				    		        }
+			    		        }
 
 			    		    }
 			    		    else 
@@ -245,19 +271,6 @@ public class Main extends Application
 			    			    }
 			    		    	
 			    		        ((Pane) lastParent).getChildren().remove(card);
-			    		        
-//			    		        for (int t=rows.size()-1;t>=0;t-=1) 
-//			    			    {
-//			    			        if (rows.get(t).getChildren().size() < rightSideCardNumberForARow) 
-//			    			        {
-//			    			            rows.get(t).getChildren().add(card);
-//			    			            return;
-//			    			        }
-//			    			        else
-//			    			        {
-//			    			        	continue;
-//			    			        }
-//			    			    }
 			    		        rows.get(card.getLastRightParentRowIndex()).getChildren().add(card.getLastRightQueueIndex(), card);
 			    		    }
 			    		});
