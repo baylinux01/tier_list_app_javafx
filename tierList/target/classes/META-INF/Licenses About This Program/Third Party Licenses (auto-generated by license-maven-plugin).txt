@@ -1,0 +1,11 @@
+
+Lists of 9 third-party dependencies.
+     (Common Public License Version 1.0) JUnit (junit:junit:3.8.1 - http://junit.org)
+     (GPLv2+CE) javafx base (org.openjfx:javafx-base:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx controls (org.openjfx:javafx-controls:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx fxml (org.openjfx:javafx-fxml:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx graphics (org.openjfx:javafx-graphics:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx media (org.openjfx:javafx-media:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx swing (org.openjfx:javafx-swing:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) javafx web (org.openjfx:javafx-web:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
+     (GPLv2+CE) jdk jsobject (org.openjfx:jdk-jsobject:27-ea+17 - https://openjdk.java.net/projects/openjfx/)
