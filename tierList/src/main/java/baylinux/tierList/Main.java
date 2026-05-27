@@ -2,6 +2,7 @@ package baylinux.tierList;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javafx.application.Application;
@@ -38,8 +39,8 @@ import javafx.stage.Stage;
 public class Main extends Application 
 {
 	
-	static int sceneWidth=1600;
-	static int sceneHeight=900;
+	static int sceneWidth=1800;
+	static int sceneHeight=1000;
 	static int rowNumber=7;
 	static double leftPartWidthPercentage=0.7;
 	static double rightPartWidthPercentage=1-leftPartWidthPercentage;
@@ -50,6 +51,8 @@ public class Main extends Application
 	static Image img;
 	static Button closeBtn;
 	static TextField tf;
+	static int rightSideCardNumberForARow=4;
+	
 	@Override
 	public void start(Stage primaryStage) throws InterruptedException 
 	{
@@ -96,6 +99,7 @@ public class Main extends Application
 				rightPart.getChildren().add(rows.get(h));
 				h+=1;
 			}
+			
 			
 			
 
@@ -171,7 +175,7 @@ public class Main extends Application
 			    		
 			    		iv = new ImageView(img);
 			    		iv.setFitHeight((sceneHeight/rowNumber)*imageHeightPercentage);
-			    		iv.setFitWidth((sceneWidth*rightPartWidthPercentage)/3);
+			    		iv.setFitWidth((sceneWidth*rightPartWidthPercentage)/rightSideCardNumberForARow);
 			    		iv.fitWidthProperty().bind(imf.widthProperty());
 			    		iv.setPreserveRatio(true);
 			    		iv.setPreserveRatio(true);
@@ -183,45 +187,81 @@ public class Main extends Application
 
 			    	    tf = new TextField();
 			    	    tf.setPrefHeight((sceneHeight/rowNumber)*textFieldHeightPercentage);
-			    		tf.setPrefWidth((sceneWidth*rightPartWidthPercentage)/3);
+			    		tf.setPrefWidth((sceneWidth*rightPartWidthPercentage)/rightSideCardNumberForARow);
 			    	    tf.setStyle("-fx-font-size:16px;-fx-font-weight: bold; -fx-alignment:center;");
 
-			    	    VBox card = new VBox(imf, tf);
+			    	    MyVBox card = new MyVBox(imf, tf);
 			    	    card.setPrefHeight(sceneHeight/rowNumber);
-			    	    card.setPrefWidth((sceneWidth*rightPartWidthPercentage)/3);
+			    	    card.setPrefWidth((sceneWidth*rightPartWidthPercentage)/rightSideCardNumberForARow);
 			    	    card.setStyle("-fx-border-color: black;");
 			    	   
 			    	    closeBtn.setOnAction(eh -> 
 			    	    {
 
-			    		    Parent parent = card.getParent();
-			    		    
+			    		    Parent lastParent= card.getParent();
+			    		   
+			    		    		
 			    		    boolean rightRowsContains=false;
 			    		    
-			    		    for (HBox row : rows) 
-			    		    {
-			    		        if (row == parent) rightRowsContains=true;
-			    		    }
+			    		    
+			    		    for (int t=rows.size()-1;t>=0;t-=1) 
+		    			    {
+			    		    	if (rows.get(t) == lastParent) 
+			    		    	{
+				    		    	rightRowsContains=true;
+				    		    	card.setLastRightParentRowIndex(t);
+				    		    	for(int l=lastParent.getChildrenUnmodifiable().size()-1;l>=0;l-=1)
+				    		    	{
+				    		    		if(lastParent.getChildrenUnmodifiable().get(l)==card)
+				    		    		{
+				    		    			card.setLastLeftQueueIndex(l);
+				    		    			break;
+				    		    		}
+				    		    	}
+				    		    	break;
+			    		    	}
+		    			    }
 			    		    
 			    		    
 			    		    if (rightRowsContains==true) 
 			    		    {
 
-			    		        ((Pane) parent).getChildren().remove(card);
+			    		        ((Pane) lastParent).getChildren().remove(card);
 
 			    		    }
-			    		    else {
-
-			    		        ((Pane) parent).getChildren().remove(card);
-
-			    		        for (HBox row : rows) 
+			    		    else 
+			    		    {
+			    		    	for (int t=tiers.size()-1;t>=0;t-=1) 
 			    			    {
-			    			        if (row.getChildren().size() < 3) 
-			    			        {
-			    			            row.getChildren().add(card);
-			    			            return;
-			    			        }
+			    		        	if(tiers.get(t)==lastParent)
+			    		        	{
+			    		        		card.setLastLeftParentRowIndex(t);
+			    		        		 for (int l=lastParent.getChildrenUnmodifiable().size()-1;l>=0;l-=1) 
+						    			    {
+						    		        	if(lastParent.getChildrenUnmodifiable().get(l)==card)
+						    		        	{
+						    		        		card.setLastLeftQueueIndex(l);
+						    		        	}
+						    			    }
+			    		        		break;
+			    		        	}
 			    			    }
+			    		    	
+			    		        ((Pane) lastParent).getChildren().remove(card);
+			    		        
+//			    		        for (int t=rows.size()-1;t>=0;t-=1) 
+//			    			    {
+//			    			        if (rows.get(t).getChildren().size() < rightSideCardNumberForARow) 
+//			    			        {
+//			    			            rows.get(t).getChildren().add(card);
+//			    			            return;
+//			    			        }
+//			    			        else
+//			    			        {
+//			    			        	continue;
+//			    			        }
+//			    			    }
+			    		        rows.get(card.getLastRightParentRowIndex()).getChildren().add(card.getLastRightQueueIndex(), card);
 			    		    }
 			    		});
 			    	    
@@ -238,14 +278,20 @@ public class Main extends Application
 			    	        ex.consume();
 			    	    });
 
-			            for (HBox row : rows) 
-			    	    {
-			    	        if (row.getChildren().size() < 3) 
-			    	        {
-			    	            row.getChildren().add(card);
-			    	            return;
-			    	        }
-			    	    }
+			    	    for (int t=rows.size()-1;t>=0;t-=1) 
+	    			    {
+	    			        if (rows.get(t).getChildren().size() < rightSideCardNumberForARow) 
+	    			        {
+	    			            rows.get(t).getChildren().add(rows.get(t).getChildren().size(),card);
+	    			            card.setLastRightParentRowIndex(t);
+	    			            card.setLastRightQueueIndex(rows.get(t).getChildren().size()-1);
+	    			            
+	    			        }
+	    			        else
+	    			        {
+	    			        	continue;
+	    			        }
+	    			    }
 			        }
 			    }
 
